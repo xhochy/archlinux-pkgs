@@ -6,7 +6,7 @@
 pkgname=spotify-beta
 pkgver=0.8.2.637
 _anotherpkgver=.g252b980.486-1
-pkgrel=1.3
+pkgrel=2
 pkgdesc="A proprietary peer-to-peer music streaming service"
 makedepends=()
 arch=('x86_64' 'i686')
