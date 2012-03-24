@@ -6,7 +6,7 @@
 pkgname=spotify-beta
 pkgver=0.8.2.637
 _anotherpkgver=.g252b980.486-1
-pkgrel=1.1
+pkgrel=1.2
 pkgdesc="A proprietary peer-to-peer music streaming service"
 makedepends=()
 arch=('x86_64' 'i686')
@@ -20,7 +20,6 @@ if [ "${CARCH}" = "x86_64" ]; then
          '37ef199620c3257d1a3e3fb304f4d9b9'
          '4d1506851cdff3a8f82da32b08df131c'
          '93a3e319f42b0594b80a140b6037363a'
-         'dedc9038d009da84ba889ddb3794a74c'
          '283d389f418b8a36629d9bb2b6476a17')
   _carch=_amd64
   libarch=x86_64-linux-gnu
@@ -29,7 +28,6 @@ elif [ "${CARCH}" = "i686" ]; then
          'e2cc39229a453fb3da9662dcb87a2ad4'
          '6e9adba486db2f958fb347ce9d772f09'
          '6cf1dde9dee8f4f7b034a4e13400e857'
-         '583e531ba01663791a2eaa29c3caa950'
          '283d389f418b8a36629d9bb2b6476a17')
   _carch=_i386
   libarch=i386-linux-gnu
@@ -40,7 +38,6 @@ source=("http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${
         "http://mirrors.us.kernel.org/ubuntu/pool/main/n/nspr/libnspr4_4.8.7-0ubuntu3${_carch}.deb"
         "http://mirrors.us.kernel.org/ubuntu/pool/main/n/nss/libnss3_3.12.9+ckbi-1.82-0ubuntu6${_carch}.deb"
         "http://mirrors.us.kernel.org/ubuntu/pool/universe/o/openssl098/libssl0.9.8_0.9.8o-7ubuntu1${_carch}.deb"
-        "http://mirrors.us.kernel.org/ubuntu/pool/main/q/qtwebkit-source/libqtwebkit4_2.2~2011week36-0ubuntu1${_carch}.deb"
         'spotify' )
 
 build() {
@@ -65,11 +62,6 @@ build() {
   install -d "${srcdir}/openssl"
   ar x "${srcdir}/libssl0.9.8_0.9.8o-7ubuntu1${_carch}.deb"
   bsdtar xf data.tar.gz -C "${srcdir}/openssl"
-
-  # qtwebkit - ubuntu oneiric
-  install -d "${srcdir}/libqtwebkit"
-  ar x "${srcdir}/libqtwebkit4_2.2~2011week36-0ubuntu1${_carch}.deb"
-  bsdtar xf data.tar.lzma -C "${srcdir}/libqtwebkit"
 }
 
 package() {
@@ -116,9 +108,6 @@ package() {
   # libpng12.so
 
   # libqtwebkit3.so
-  install -D -m644 "${srcdir}/libqtwebkit/usr/lib/$libarch/libQtWebKit.so.4.9.0" \
-    "${pkgdir}/usr/share/spotify/libs/"
-  ln -s ./libQtWebKit.so.4.9.0 "${pkgdir}/usr/share/spotify/libs/libQtWebKit.so.4"
 
   # libcrypto.so
   install -D -m644 "${srcdir}/openssl/lib/libcrypto.so.0.9.8" \
