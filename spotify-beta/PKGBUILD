@@ -6,7 +6,7 @@
 pkgname=spotify-beta
 pkgver=0.8.2.637
 _anotherpkgver=.g252b980.486-1
-pkgrel=1.2
+pkgrel=1.3
 pkgdesc="A proprietary peer-to-peer music streaming service"
 makedepends=()
 arch=('x86_64' 'i686')
@@ -19,7 +19,6 @@ if [ "${CARCH}" = "x86_64" ]; then
   md5sums=('96f4f950555cad73fcbf29c81d5e2957'
          '37ef199620c3257d1a3e3fb304f4d9b9'
          '4d1506851cdff3a8f82da32b08df131c'
-         '93a3e319f42b0594b80a140b6037363a'
          '283d389f418b8a36629d9bb2b6476a17')
   _carch=_amd64
   libarch=x86_64-linux-gnu
@@ -27,17 +26,15 @@ elif [ "${CARCH}" = "i686" ]; then
   md5sums=('0fabe525f867da4fac0cb7da3132291f'
          'e2cc39229a453fb3da9662dcb87a2ad4'
          '6e9adba486db2f958fb347ce9d772f09'
-         '6cf1dde9dee8f4f7b034a4e13400e857'
          '283d389f418b8a36629d9bb2b6476a17')
   _carch=_i386
   libarch=i386-linux-gnu
 fi
 
-depends=("alsa-lib>=1.0.14" "qt>=4.5.0" "libxss" "openssl" "qtwebkit" "gtk2" "gconf" "libgcrypt" "libpng12")
+depends=("alsa-lib>=1.0.14" "qt>=4.5.0" "libxss" "openssl" "qtwebkit" "gtk2" "gconf" "libgcrypt" "libpng12" "openssl098")
 source=("http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${pkgver}${_anotherpkgver}${_carch}.deb"
         "http://mirrors.us.kernel.org/ubuntu/pool/main/n/nspr/libnspr4_4.8.7-0ubuntu3${_carch}.deb"
         "http://mirrors.us.kernel.org/ubuntu/pool/main/n/nss/libnss3_3.12.9+ckbi-1.82-0ubuntu6${_carch}.deb"
-        "http://mirrors.us.kernel.org/ubuntu/pool/universe/o/openssl098/libssl0.9.8_0.9.8o-7ubuntu1${_carch}.deb"
         'spotify' )
 
 build() {
@@ -57,11 +54,6 @@ build() {
   install -d "${srcdir}/libnss3"
   ar x "${srcdir}/libnss3_3.12.9+ckbi-1.82-0ubuntu6${_carch}.deb"
   bsdtar xf data.tar.gz -C "${srcdir}/libnss3"
-
-  # openssl 0.98 - ubuntu oneiric
-  install -d "${srcdir}/openssl"
-  ar x "${srcdir}/libssl0.9.8_0.9.8o-7ubuntu1${_carch}.deb"
-  bsdtar xf data.tar.gz -C "${srcdir}/openssl"
 }
 
 package() {
@@ -104,18 +96,6 @@ package() {
   install -D -m644 "${srcdir}/libnss3/usr/lib/$libarch/libsmime3.so" \
     "${pkgdir}/usr/share/spotify/libs/"
   ln -s ./libsmime3.so "${pkgdir}/usr/share/spotify/libs/libsmime3.so.1d"
-
-  # libpng12.so
-
-  # libqtwebkit3.so
-
-  # libcrypto.so
-  install -D -m644 "${srcdir}/openssl/lib/libcrypto.so.0.9.8" \
-    "${pkgdir}/usr/share/spotify/libs/"
-
-  # libssl.so
-  install -D -m644 "${srcdir}/openssl/lib/libssl.so.0.9.8" \
-    "${pkgdir}/usr/share/spotify/libs/"
 
   # Copy license
   install -d ${pkgdir}/usr/share/licenses/spotify-beta
