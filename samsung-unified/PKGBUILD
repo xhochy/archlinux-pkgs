@@ -1,0 +1,38 @@
+pkgname=samsung-unified
+pkgver=4.00.35
+pkgrel=1
+pkgdesc="Official Samsung Drivers"
+url="http://www.samsung.com/us/support/downloads/color-laser-printers/CLP-315/XAA"
+arch=('x86_64' 'i686')
+license=('custom')
+depends=('cups')
+source=("http://downloadcenter.samsung.com/content/DR/201110/20111019151150392/UnifiedLinuxDriver_1.01.tar.gz")
+md5sums=('01e64b7a447f7d03f20679367fba8066')
+# Do not alter binary blobs
+options=(!strip)
+
+if [ "${CARCH}" = "x86_64" ]; then
+  _carch=x86_64
+  libpath=lib64
+elif [ "${CARCH}" = "i686" ]; then
+  _carch=i386
+  libpath=lib
+fi
+
+package() {
+    cd "${srcdir}/cdroot/Linux"
+
+    install -d -m755 "${pkgdir}/usr/share/cups/model/samsung/cms"
+    install -d -m755 "${pkgdir}/usr/lib/cups/filter"
+    install -d -m755 "${pkgdir}/usr/lib/cups/backend"
+
+    # Intsall PPD File + color profiles
+    install -m644 -t "${pkgdir}/usr/share/cups/model/samsung/" ${srcdir}/cdroot/Linux/noarch/at_opt/share/ppd/*.ppd
+    install -m644 -t "${pkgdir}/usr/share/cups/model/samsung/cms/" ${srcdir}/cdroot/Linux/noarch/at_opt/share/ppd/cms/*
+
+    # Install Binaries and Libraries
+    install -Dm755 "${srcdir}/cdroot/Linux/$_carch/at_root/usr/$libpath/libmfp.so.1.0.1" "${pkgdir}/usr/lib/"
+
+    cp -r "./$_carch/at_root/usr/$libpath/cups/filter/" "${pkgdir}/usr/lib/cups/"
+    cp -r "./$_carch/at_root/usr/$libpath/cups/backend/" "${pkgdir}/usr/lib/cups/"
+}
