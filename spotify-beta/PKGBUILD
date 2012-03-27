@@ -4,9 +4,9 @@
 # Contributor: xintron <carlsson.marcus@gmail.com>
 
 pkgname=spotify-beta
-pkgver=0.8.2.637
-_anotherpkgver=.g252b980.486-1
-pkgrel=2.2
+pkgver=0.8.2.639
+_anotherpkgver=.g79d339d.504-1
+pkgrel=1
 pkgdesc="A proprietary peer-to-peer music streaming service"
 makedepends=()
 arch=('x86_64' 'i686')
@@ -16,14 +16,14 @@ conflicts=('spotify')
 options=(!strip)
 
 if [ "${CARCH}" = "x86_64" ]; then
-  md5sums=('96f4f950555cad73fcbf29c81d5e2957'
+  md5sums=('1291b133093636354b99a461ee479cad'
          '37ef199620c3257d1a3e3fb304f4d9b9'
          'dedc9038d009da84ba889ddb3794a74c'
          '283d389f418b8a36629d9bb2b6476a17')
   _carch=_amd64
   libarch=x86_64-linux-gnu
 elif [ "${CARCH}" = "i686" ]; then
-  md5sums=('0fabe525f867da4fac0cb7da3132291f'
+  md5sums=('1aab5d48c1d9a1c17c86e3cc21a9c664'
          'e2cc39229a453fb3da9662dcb87a2ad4'
          '583e531ba01663791a2eaa29c3caa950'
          '283d389f418b8a36629d9bb2b6476a17')
@@ -89,9 +89,7 @@ package() {
   ln -s /usr/lib/libnssutil3.so "${pkgdir}/usr/share/spotify/libs/libnssutil3.so.1d"
 
   # libsmime3.so
-  install -D -m644 "${srcdir}/libnss3/usr/lib/$libarch/libsmime3.so" \
-    "${pkgdir}/usr/share/spotify/libs/"
-  ln -s ./libsmime3.so "${pkgdir}/usr/share/spotify/libs/libsmime3.so.1d"
+  ln -s /usr/lib/libsmime3.so "${pkgdir}/usr/share/spotify/libs/libsmime3.so.1d"
 
   # libqtwebkit3.so
   install -D -m644 "${srcdir}/libqtwebkit/usr/lib/$libarch/libQtWebKit.so.4.9.0" \
